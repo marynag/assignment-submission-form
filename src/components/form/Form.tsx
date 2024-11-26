@@ -28,8 +28,8 @@ export const Form = ({ levels, isLevelsLoaded = false }: FormProps) => {
     formState: { errors, isValid },
   } = useForm<TypeSearchSchema>({
     resolver: zodResolver(SearchSchema),
-    reValidateMode: "onSubmit",
-    mode: "onSubmit",
+    reValidateMode: "onChange",
+    // mode: "onSubmit",
     defaultValues: {
       level: levels && levels.length ? levels[0] : undefined,
     },
