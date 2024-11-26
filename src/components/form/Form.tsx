@@ -81,6 +81,7 @@ export const Form = ({ levels }: FormProps) => {
         placeholder="Emmy Porter"
         error={errors.name}
         name="name"
+        className="md:col-span-1 col-span-2"
       />
       <Input
         label="Email"
@@ -89,6 +90,7 @@ export const Form = ({ levels }: FormProps) => {
         placeholder="user@email.com"
         error={errors.email}
         name="email"
+        className="md:col-span-1 col-span-2"
       />
       <Dropdown
         label="Skill Level"
@@ -104,6 +106,7 @@ export const Form = ({ levels }: FormProps) => {
         placeholder="https://github.com"
         error={errors.gitRepoUrl}
         name="gitRepoUrl"
+        className="md:col-span-1 col-span-2"
       />
       <Input
         label="Description"
@@ -112,6 +115,7 @@ export const Form = ({ levels }: FormProps) => {
         rows={TEXTAREA_ROWS_AMOUNT}
         error={errors.description}
         name="description"
+        className="col-span-2"
       />
 
       <Button />

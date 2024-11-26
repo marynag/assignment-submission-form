@@ -44,7 +44,7 @@ export const Input = <TFieldValues extends FieldValues>({
     const inputProps = {
       ...field,
       disabled,
-      className: cn(commonClasses, errorClasses, disabledClasses, className),
+      className: cn(commonClasses, errorClasses, disabledClasses),
       placeholder,
     };
 
@@ -56,7 +56,7 @@ export const Input = <TFieldValues extends FieldValues>({
   };
 
   return (
-    <div className="mb-5 md:col-span-1 col-span-2">
+    <div className={`mb-5 ${className}`}>
       <label className="block mb-2 text-sm font-medium text-gray-900">
         {label}
       </label>
