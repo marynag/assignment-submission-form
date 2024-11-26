@@ -1,5 +1,7 @@
 "use server";
 
+import { API_URL } from "@/components/constants";
+
 interface IFormData {
   name: string;
   email: string;
@@ -10,20 +12,20 @@ interface IFormData {
 
 export async function createCandidateForm(requestBody: IFormData) {
   try {
-    const response = await fetch(
-      "https://tools.qa.public.ale.ai/api/tools/candidates/levels",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      }
-    );
+    const response = await fetch(`${API_URL}/assignments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || "Failed to create candidate level");
+      return {
+        success: false,
+        error: errorData.message || "Failed to create candidate level",
+      };
     }
 
     const responseData = await response.json();
@@ -32,11 +34,17 @@ export async function createCandidateForm(requestBody: IFormData) {
       data: responseData,
     };
   } catch (error) {
-    return {
-      success: false,
-      error:
-        error instanceof Error ? error.message : "An unexpected error occurred",
-    };
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    } else {
+      return {
+        success: false,
+        error: "An unexpected error occurred",
+      };
+    }
   }
 }
 
