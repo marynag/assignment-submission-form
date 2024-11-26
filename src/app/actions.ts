@@ -22,9 +22,14 @@ export async function createCandidateForm(requestBody: IFormData) {
 
     if (!response.ok) {
       const errorData = await response.json();
+      const errorText =
+        errorData.errors && errorData.errors.length > 0
+          ? errorData.errors.map((error: string) => error).join(", ")
+          : "";
+
       return {
         success: false,
-        error: errorData.message || "Failed to create candidate level",
+        error: `${errorData.message} ${errorText}` || "Failed to send form",
       };
     }
 
@@ -65,3 +70,27 @@ export const sendForm = async (
 
   return await createCandidateForm(formData);
 };
+
+export async function getLevels() {
+  try {
+    const response = await fetch(`${API_URL}/levels`);
+    if (!response.ok) {
+      throw new Error("Failed to fetch levels");
+    }
+    const data = await response.json();
+
+    return {
+      data: data.levels ?? [],
+      success: true,
+    };
+  } catch (e: unknown) {
+    const errorMessage = e instanceof Error ? e.message : String(e);
+    console.error("Error fetching levels:", errorMessage);
+
+    return {
+      data: [],
+      success: false,
+      error: errorMessage,
+    };
+  }
+}
