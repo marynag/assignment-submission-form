@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
-import Page from "../thank-you/page";
+import Page from "../app/thank-you/page";
 
 // Mock next/navigation
 jest.mock("next/navigation", () => ({

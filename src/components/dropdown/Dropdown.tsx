@@ -20,7 +20,6 @@ export const Dropdown: React.FC<DropdownProps> = ({
   levels,
   isLoaded,
 }) => {
-  
   const renderErrorMessage = () => {
     if (!isLoaded) {
       return (
@@ -46,17 +45,22 @@ export const Dropdown: React.FC<DropdownProps> = ({
     "focus:border-blue-500 block w-full p-2.5",
     error && "border-2 border-red-500"
   );
-
   const renderSelect = () => {
     return (
       <Controller
         name={name}
         control={control}
         render={({ field }) => (
-          <select {...field} className={selectClassName}>
+          <select
+            {...field}
+            className={selectClassName}
+            data-testid={"level"}
+            value={field.value || ""}
+            onChange={(e) => field.onChange(e.target.value)}
+          >
             {levels.map((level) => (
               <option key={level} value={level} className="capitalize">
-                {level.charAt(0).toUpperCase() + level.slice(1)}
+                {level}
               </option>
             ))}
           </select>
@@ -64,7 +68,6 @@ export const Dropdown: React.FC<DropdownProps> = ({
       />
     );
   };
-
   return (
     <div className="mb-5 md:col-span-1 col-span-2">
       <label className="block mb-2 text-sm font-medium text-gray-900">

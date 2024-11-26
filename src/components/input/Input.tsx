@@ -49,15 +49,18 @@ export const Input = <TFieldValues extends FieldValues>({
     };
 
     if (type === INPUT_TYPE.Text && rows) {
-      return <textarea {...inputProps} rows={rows} />;
+      return <textarea {...inputProps} rows={rows} aria-label={name} />;
     }
 
-    return <input {...inputProps} type={type} />;
+    return <input {...inputProps} aria-label={name} />;
   };
 
   return (
     <div className={`mb-5 ${className}`}>
-      <label className="block mb-2 text-sm font-medium text-gray-900">
+      <label
+        className="block mb-2 text-sm font-medium text-gray-900"
+        id={label}
+      >
         {label}
       </label>
       <Controller
