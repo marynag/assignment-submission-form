@@ -11,7 +11,7 @@ export const SearchSchema = z.object({
     .string()
     .url({ message: "Invalid URL" })
     .min(1, { message: "URL is required" }),
-  level: z.enum(["beginner", "intermediate", "advanced"]),
+  level: z.string().min(1, { message: "Skill level is required" }),
 });
 
 export type TypeSearchSchema = z.infer<typeof SearchSchema>;
