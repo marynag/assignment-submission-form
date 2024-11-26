@@ -8,12 +8,19 @@ import { Input } from "@/components/input/Input";
 import { TypeSearchSchema, SearchSchema } from "./service";
 import { Button } from "../button/Button";
 import { Dropdown } from "../dropdown/Dropdown";
+import { sendForm } from "@/app/actions";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface FormProps {
   levels: string[];
 }
 
 export const Form = ({ levels }: FormProps) => {
+  const router = useRouter();
+
+  const [error, setError] = useState<string | undefined>();
+
   const {
     control,
     handleSubmit,
@@ -31,10 +38,38 @@ export const Form = ({ levels }: FormProps) => {
     },
   });
 
-  const onSubmit = (data: TypeSearchSchema) => {
-    console.log("Form submitted with data:", data);
-    alert("Form submitted successfully");
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (error) {
+      timer = setTimeout(() => {
+        setError(undefined);
+      }, 5000);
+    }
+
+    return () => {
+      if (timer) {
+        clearTimeout(timer);
+      }
+    };
+  }, [error]);
+
+  const onSubmit = async (data: TypeSearchSchema) => {
+    const { success, error } = await sendForm(
+      data.name,
+      data.email,
+      data.description,
+      data.gitRepoUrl,
+      data.level
+    );
+
+    if (success) {
+      router.push("/thank-you");
+    } else if (error) {
+      setError(error);
+    }
   };
+
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -78,7 +113,11 @@ export const Form = ({ levels }: FormProps) => {
         error={errors.description}
         name="description"
       />
+
       <Button />
+      {error && (
+        <p className="text-red-500 text-sm col-span-2 text-center">{error}</p>
+      )}
     </form>
   );
 };
