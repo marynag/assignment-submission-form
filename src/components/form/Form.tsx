@@ -13,10 +13,11 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface FormProps {
-  levels: string[];
+  levels: string[] | undefined;
+  isLevelsLoaded?: boolean;
 }
 
-export const Form = ({ levels }: FormProps) => {
+export const Form = ({ levels, isLevelsLoaded = false }: FormProps) => {
   const router = useRouter();
 
   const [error, setError] = useState<string | undefined>();
@@ -24,17 +25,13 @@ export const Form = ({ levels }: FormProps) => {
   const {
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<TypeSearchSchema>({
     resolver: zodResolver(SearchSchema),
     reValidateMode: "onSubmit",
     mode: "onSubmit",
     defaultValues: {
-      name: "",
-      email: "",
-      description: "",
-      gitRepoUrl: "",
-      level: levels && levels.length ? levels[0] : "",
+      level: levels && levels.length ? levels[0] : undefined,
     },
   });
 
@@ -96,8 +93,9 @@ export const Form = ({ levels }: FormProps) => {
         label="Skill Level"
         name="level"
         control={control}
-        levels={levels}
+        levels={levels ?? []}
         error={errors.level}
+        isLoaded={isLevelsLoaded}
       />
       <Input
         label="GitHub Repository URL"
@@ -118,7 +116,7 @@ export const Form = ({ levels }: FormProps) => {
         className="col-span-2"
       />
 
-      <Button />
+      <Button disabled={!isValid} />
       {error && (
         <p className="text-red-500 text-sm col-span-2 text-center">{error}</p>
       )}
