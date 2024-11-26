@@ -6,7 +6,10 @@ export const SearchSchema = z.object({
     .string()
     .email({ message: "Invalid email address" })
     .min(1, { message: "Email is required" }),
-  description: z.string().min(1, { message: "Description is required" }),
+  description: z
+    .string()
+    .min(1, { message: "Description is required" })
+    .min(10, { message: "Description must be at least 10 characters" }),
   gitRepoUrl: z
     .string()
     .url({ message: "Invalid URL" })
