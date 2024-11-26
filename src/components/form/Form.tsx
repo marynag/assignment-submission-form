@@ -5,10 +5,15 @@ import { useForm } from "react-hook-form";
 
 import { INPUT_TYPE, TEXTAREA_ROWS_AMOUNT } from "@/components/input/constants";
 import { Input } from "@/components/input/Input";
-import { SearchSchema, TypeSearchSchema } from "./service";
+import { TypeSearchSchema, SearchSchema } from "./service";
 import { Button } from "../button/Button";
+import { Dropdown } from "../dropdown/Dropdown";
 
-export const Form = () => {
+interface FormProps {
+  levels: string[];
+}
+
+export const Form = ({ levels }: FormProps) => {
   const {
     control,
     handleSubmit,
@@ -22,7 +27,7 @@ export const Form = () => {
       email: "",
       description: "",
       gitRepoUrl: "",
-      level: "beginner",
+      level: levels && levels.length ? levels[0] : "",
     },
   });
 
@@ -50,22 +55,13 @@ export const Form = () => {
         error={errors.email}
         name="email"
       />
-      <div className="mb-5 md:col-span-1 col-span-2">
-        <label className="block mb-2 text-sm font-medium text-gray-900">
-          Skill Level
-        </label>
-        <select
-          {...control}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full p-2.5"
-        >
-          <option value="beginner">Beginner</option>
-          <option value="intermediate">Intermediate</option>
-          <option value="advanced">Advanced</option>
-        </select>
-        {errors.level && (
-          <p className="text-red-500 text-sm">{errors.level.message}</p>
-        )}
-      </div>
+      <Dropdown
+        label="Skill Level"
+        name="level"
+        control={control}
+        levels={levels}
+        error={errors.level}
+      />
       <Input
         label="GitHub Repository URL"
         type={INPUT_TYPE.Url}
